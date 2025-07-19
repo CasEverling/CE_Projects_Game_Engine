@@ -10,14 +10,14 @@
 
 /* DEFINES THE PERSPECTIVE OF THE GAME */
 
-#define SIN 6
-#define COS 11
-#define HEIGHT 15
+#define SIN 6*3
+#define COS 11*3
+#define HEIGHT 15*3
 
 
 /* Camera OffSet temporarely described here*/
-#define WINDOW_WIDTH 640/2
-#define WINDOW_HEIGHT 480/2
+#define WINDOW_WIDTH 1000/2 - 250
+#define WINDOW_HEIGHT 800/2
 
 /* STATIC */
 std::vector<SpriteRenderer*> SpriteRenderer::spriteRenderers = std::vector<SpriteRenderer*>(); 

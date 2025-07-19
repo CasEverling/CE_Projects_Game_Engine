@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <vector>
+#include "vector2D.h"
 
 enum ColliderType {
     CircleColider,
@@ -8,24 +9,40 @@ enum ColliderType {
 
 class Collider2D
 {
-    public:
+    private:
+        Collider2D();
+
+    public:        
+        std::shared_ptr<Collider2D> create();
+
         ColliderType ColliderType;
 
         void onCollision();
         float getCentralValue(int axis);
-        float getExtremeValue(int axis, bool min);
+        Vector2D getExtremeValue(int axis);
         bool isColliding(Collider2D* otherCollider);
 
+
+
+
     public:
-        static bool isColliding(Collider2D* collider1, Collider2D* collider2);
+        static bool isColliding(std::shared_ptr<Collider2D> collider1, std::shared_ptr<Collider2D> collider2);
+
         static void CheckAllCollisions();
-        static void CheckAllCollisions(int begin, int end, int axis, int endCount, float average);
+        static void CheckAllCollisionsMultiThread();
+        
+
         static void cleanup();
         static int  getNumberOfColliders();
     
     private:
-        static std::vector<Collider2D*> allCollider2D;
-        static int numberOfColliders;
+        static void CheckAllCollisions(bool isMultiThread);
 
-        
+        static void CheckAllCollisions(std::vector<std::size_t>& indexes, int axis, int begin, int size, int endCount, float average, int max_size);
+        static void CheckAllCollisionsMultiThread(const std::vector<std::size_t>& indexes, int axis, int size, int endCount, float average, int max_size);
+        static void BruteForceCheck(const std::vector<std::size_t>& indexes, int size);
+        static void BruteForceCheck(std::vector<std::size_t>& indexes, int begin, int size);
+
+        static std::vector<std::shared_ptr<Collider2D>> allCollider2D;
+        static int numberOfColliders;
 };

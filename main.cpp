@@ -20,8 +20,8 @@
 #include "block.h"
 
 /* We will use this renderer to draw into this window every frame. */
-#define WINDOW_WIDTH 640
-#define WINDOW_HEIGHT 480
+#define WINDOW_WIDTH 1000
+#define WINDOW_HEIGHT 800
 #define TEXTURE_NAME "astronaut"
 
 static float texture_width, texture_height;
@@ -107,7 +107,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
     const Uint64 now = SDL_GetTicks();
 
     /* as you can see from this, rendering draws over whatever was drawn before it. */
-    SDL_SetRenderDrawColor(Renderer::renderer, 255, 10, 10, SDL_ALPHA_OPAQUE);  /* black, full alpha */
+    SDL_SetRenderDrawColor(Renderer::renderer, 50, 50, 50, SDL_ALPHA_OPAQUE);  /* black, full alpha */
     SDL_RenderClear(Renderer::renderer);  /* start with a blank canvas. */
 
     /* Components that have to be visisted every frame */

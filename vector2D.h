@@ -1,22 +1,23 @@
 #ifndef VECTOR_2D_H
 #define VECTOR_2D_H
 
+#include <stdexcept>
+
 class Vector2D {
     private:
-        float _x, _y, _z, magnitude;
+        float _x, _y, magnitude;
         void calculateMagnitude() {
 
         }
     public:
-        Vector2D(float x, float y, float z) : _x(x), _y(y), _z(z);
+        Vector2D(float x, float y) : _x(x), _y(y) {}
 
         Vector2D unitVector() {
-            return Vector2D( _x/magnitude, _y/magnitude, _z/magnitude);
+            return Vector2D( _x/magnitude, _y/magnitude);
         };
 
-        float get_x() {return _x;}
-        float get_y() {return _y;}
-        float get_z() {return _z;}
+        float get_x() const {return _x;}
+        float get_y() const {return _y;}
 
         float set_x(float value) {
             _x = value;
@@ -28,10 +29,13 @@ class Vector2D {
             calculateMagnitude();
         }
 
-
-        float set_z(float value) {
-            _z = value;
-            calculateMagnitude();
+        float operator[](long long unsigned int index) {
+            switch (index)
+            {
+                case 0  : return get_x();
+                case 1  : return get_y();
+                default : throw std::out_of_range("Index not in range [0,1]"); // Invalid Index
+            }
         }
 
         /* OPERATIONS */
@@ -39,8 +43,9 @@ class Vector2D {
         // Add
         Vector2D operator+(const Vector2D& other) const {
             return Vector2D(
-                
-            )
+                _x + other.get_x(),
+                _y + other.get_y()
+            );
         }
         // Multuply By Scalar
 
@@ -48,18 +53,9 @@ class Vector2D {
         Vector2D dotProcut(Vector2D* other) {
             return Vector2D(
                 _x * other->get_x(), 
-                _y * other->get_y(), 
-                _z * other->get_z());
-        } 
-
-        // Cross Product
-        Vector2D crossProduct(Vector2D* other) {
-            return Vector2D(
-                _y * other->get_z() - _z * other->get_y(),
-                _z * other->get_x() - _x * other->get_y(),
-                _x * other->get_y() - _y * other->get_z()
+                _y * other->get_y()
             );
-        }
+        } 
         
 };
 

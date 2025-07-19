@@ -11,12 +11,16 @@ class Character : public UpdatableObject {
         float velocity_x, velocity_y;
         float position_x, position_y;
         SpriteRenderer spriteRenderer;
-        cbId callback_value_1, callback_value_2;
-        void change_x();
-        void change_y();
+        
+        
 
     public:
         Character(float velocity_x, float velocity_y, float position_x, float position_y);
         ~Character();
         void Update() override;
+
+        void move_right() { velocity_x += 10; }
+        void move_left () { velocity_x -= 10; }
+        void move_up   () { velocity_y += 10; }
+        void move_down () { velocity_y -= 10; }
 };

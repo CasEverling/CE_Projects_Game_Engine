@@ -18,7 +18,7 @@ class Block : public UpdatableObject {
     public:
         Block(float position_x, float position_y, float position_z) :
             x(position_x), y(position_y), z(position_z), spriteRenderer("block") {
-                spriteRenderer.setTextureName("block");
+                spriteRenderer.setTextureName("block_x_3");
                 spriteRenderer.layer = InGame_Layer;
                 spriteRenderer.x = x;
                 spriteRenderer.y = y;
