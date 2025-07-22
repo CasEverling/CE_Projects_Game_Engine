@@ -2,6 +2,7 @@
 #define VECTOR_3D_H
 
 #include <cmath>
+#include <exception>
 
 class Vector3D {
     private:
@@ -14,7 +15,11 @@ class Vector3D {
             calculateMagnitude();
         }
 
+        Vector3D() : _x(0), _y(0), _z(0), magnitude(0) {}
+
         Vector3D unitVector() const {
+            if (magnitude == 0) 
+                return Vector3D(); 
             return Vector3D( 
                 _x/magnitude, 
                 _y/magnitude, 
@@ -27,18 +32,18 @@ class Vector3D {
 
         float get_magnitude() const {return magnitude;}
 
-        float set_x(float value) {
+        void set_x(float value) {
             _x = value;
             calculateMagnitude();
         }
 
-        float set_y(float value) {
+        void set_y(float value) {
             _y = value;
             calculateMagnitude();
         }
 
 
-        float set_z(float value) {
+        void set_z(float value) {
             _z = value;
             calculateMagnitude();
         }
@@ -71,11 +76,17 @@ class Vector3D {
             );
         }
 
+        Vector3D operator-=(const Vector3D& other) {
+            _x = _x - other.get_x();
+            _y = _y - other.get_y(),
+            _z = _z - other.get_z()
+        }
+
 
         // Multuply By Scalar
 
         // Dot Product
-        Vector3D dotProcut(Vector3D* other) {
+        Vector3D dotProcut(const Vector3D& other) const{
             return Vector3D(
                 _x * other->get_x(), 
                 _y * other->get_y(), 
@@ -84,12 +95,21 @@ class Vector3D {
         } 
 
         // Cross Product
-        Vector3D crossProduct(Vector3D* other) {
+        Vector3D crossProduct(const Vector3D& other) const {
             return Vector3D(
-                _y * other->get_z() - _z * other->get_y(),
-                _z * other->get_x() - _x * other->get_y(),
-                _x * other->get_y() - _y * other->get_z()
+                _y * other.get_z() - _z * other.get_y(),
+                _z * other.get_x() - _x * other.get_y(),
+                _x * other.get_y() - _y * other.get_z()
             );
+        }
+
+        float operator[](size_t index) {
+            if (index > 2) throw "Maximum index in a vector3D is 2";
+            switch (index) {
+                case 0: return _x;
+                case 1: return _y;
+                case 2: return _z;
+            }
         }
         
 };

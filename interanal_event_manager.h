@@ -27,8 +27,7 @@ class InternalEventManager {
         EventMap<void(int)>& getEventMap(std::function<void(int)> f) noexcept { return intEvents; }
         EventMap<void(float)>& getEventMap(std::function<void(float)> f) noexcept { return floatEvents; }
 
-    public:
-        
+    public:        
         template<typename T>
         void addListener(std::string&& eventName, std::function<T>&& function) noexcept;
 

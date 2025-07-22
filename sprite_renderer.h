@@ -28,7 +28,7 @@ class SpriteRenderer {
     public:        
         RenderingLayer layer;
         float x, y, z;
-
+        
         SpriteRenderer(std::string texture);
         ~SpriteRenderer();
 

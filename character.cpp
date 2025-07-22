@@ -6,10 +6,12 @@
 #include "time.h"
 #include "sprite_renderer.h"
 #include "event_manager.h"
+#include "collider_2d.h"
+#include "collider_3d.h"
 
 Character::Character(float velocity_x, float velocity_y, float position_x, float position_y) 
   : UpdatableObject(),
-    spriteRenderer("mage_x_3") 
+    spriteRenderer("bloxk_x_3") 
 {
 
     this->velocity_x = velocity_x;
@@ -23,6 +25,9 @@ Character::Character(float velocity_x, float velocity_y, float position_x, float
     EventManager::AddListener("move_left", [this](){move_left();});
     EventManager::AddListener("move_up", [this](){move_up();});
     EventManager::AddListener("move_down", [this](){move_down();});
+
+    collider = Collider3D::create();
+    collider->reference = Vector3D(1,1,2);
 }
 
 Character::~Character() {
@@ -33,7 +38,10 @@ void Character::Update() {
     position_x += velocity_x * Time::deltatime;
     position_y += velocity_y * Time::deltatime;
 
+    collider->position = Vector3D(position_x, position_y,0);
+
     spriteRenderer.x = position_x;
     spriteRenderer.y = position_y;
+    spriteRenderer.z = 0;
 }
 

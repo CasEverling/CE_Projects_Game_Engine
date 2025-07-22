@@ -18,6 +18,7 @@
 #include "input_map.h"
 #include "input_manager.h"
 #include "block.h"
+#include "collider_3d.h"
 
 /* We will use this renderer to draw into this window every frame. */
 #define WINDOW_WIDTH 1000
@@ -27,6 +28,19 @@
 static float texture_width, texture_height;
 
 static float position = 0;
+
+void DebugRenderFPS()
+{
+    if (!Renderer::renderer) return;
+
+    float fps = (Time::deltatime > 0.0f) ? (1.0f / Time::deltatime) : 0.0f;
+
+    char buffer[64];
+    std::snprintf(buffer, sizeof(buffer), "FPS: %.1f", fps);
+
+    SDL_SetRenderDrawColor(Renderer::renderer, 255, 255, 255, SDL_ALPHA_OPAQUE); // White
+    SDL_RenderDebugText(Renderer::renderer, 10, 10, buffer);
+}
 
 /* This function runs once at startup. */
 SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
@@ -72,6 +86,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
         for (int j = 0; j < 10; j++)
             new Block(i,j,-1);
     
+    
     for (int i = 0; i < 1; i ++)
         for (int j = 0; j < 10; j++)
             new Block(j,i,0);
@@ -88,6 +103,11 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
         for (int j = 9; j < 10; j++)
             new Block(j,i,0);
     
+    for (int i = 3; i < 5; i ++)
+        for (int j = 3; j < 5; j++)
+            new Block(j,i,0);
+    
+    
     //new Character(20,0, - 100, 10);
 
     return SDL_APP_CONTINUE;  /* carry on with the program! */
@@ -103,11 +123,12 @@ SDL_AppResult SDL_AppEvent(void *appstate, SDL_Event *event)
 SDL_AppResult SDL_AppIterate(void *appstate)
 {
     Time::Tick();
-    SDL_FRect dst_rect;
-    const Uint64 now = SDL_GetTicks();
+
+    Renderer::lightness = 0;
+    Collider3D::CheckAllCollisions();
 
     /* as you can see from this, rendering draws over whatever was drawn before it. */
-    SDL_SetRenderDrawColor(Renderer::renderer, 50, 50, 50, SDL_ALPHA_OPAQUE);  /* black, full alpha */
+    SDL_SetRenderDrawColor(Renderer::renderer, 50*Renderer::lightness, 50*Renderer::lightness, 50*Renderer::lightness, SDL_ALPHA_OPAQUE);  /* black, full alpha */
     SDL_RenderClear(Renderer::renderer);  /* start with a blank canvas. */
 
     /* Components that have to be visisted every frame */
@@ -115,6 +136,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
     UpdatableObject::UpdateAll();
     SpriteRenderer::displayAll();
 
+    DebugRenderFPS();
     SDL_RenderPresent(Renderer::renderer);  /* put it all on the screen! */
 
     return SDL_APP_CONTINUE;  /* carry on with the program! */
@@ -127,4 +149,5 @@ void SDL_AppQuit(void *appstate, SDL_AppResult result)
     UpdatableObject::cleanup();
     SpriteRenderer::cleanUp();
     EventManager::cleanup();
+    Collider3D::cleanup();
 }

@@ -10,8 +10,8 @@
 
 /* DEFINES THE PERSPECTIVE OF THE GAME */
 
-#define SIN 6*3
-#define COS 11*3
+#define SIN 7*3
+#define COS 12*3
 #define HEIGHT 15*3
 
 
@@ -78,11 +78,9 @@ bool SpriteRenderer::isGreaterThan(SpriteRenderer* other) {
     
     if (z != other->z)
         return z > other->z;
-    
-    if (y != other->y)
-        return y < other->y;
-    
-    return x > other->x;
+        
+    return x + y > other->x + other->y;
+
 }
 
 void SpriteRenderer::display() {
@@ -95,8 +93,8 @@ void SpriteRenderer::display() {
     switch (layer)
     {
     case InGame_Layer:
-        dst_rect.x = (x + y) * COS + WINDOW_WIDTH;
-        dst_rect.y = (x - y) * SIN - z * HEIGHT + WINDOW_HEIGHT;
+        dst_rect.x = (x - y) * COS + WINDOW_WIDTH;
+        dst_rect.y = (x + y) * SIN - z * HEIGHT + WINDOW_HEIGHT - texture_height;
         dst_rect.w = texture_width;
         dst_rect.h = texture_height;
         break;

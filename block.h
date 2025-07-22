@@ -3,18 +3,18 @@
 
 #include "updatable_object.h"
 #include "sprite_renderer.h"
+#include "collider_2d.h"
+#include "collider_3d.h"
 
-#define SIN 6
-#define COS 11
-#define HEIGHT 15
+#include <SDL3/SDL.h>
 
-#define WINDOW_WIDTH 640
-#define WINDOW_HEIGHT 480
 
 class Block : public UpdatableObject {
     private:
         float x, y, z;
         SpriteRenderer spriteRenderer;
+        std::shared_ptr<Collider3D> collider;
+
     public:
         Block(float position_x, float position_y, float position_z) :
             x(position_x), y(position_y), z(position_z), spriteRenderer("block") {
@@ -23,6 +23,11 @@ class Block : public UpdatableObject {
                 spriteRenderer.x = x;
                 spriteRenderer.y = y;
                 spriteRenderer.z = z;
+
+                collider = Collider3D::create();
+                collider->position = Vector3D(x, y, z);
+                collider->reference = Vector3D(1,1,1);
+                SDL_Log("Collider at %f, %f, size 1, 1", position_x, position_y);
             };
     
         ~Block();

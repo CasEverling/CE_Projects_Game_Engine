@@ -1,27 +1,39 @@
+#ifndef COLLIDER_2D_H
+#define COLLIDER_2D_H
+
 #include <stdlib.h>
 #include <vector>
 #include "vector2D.h"
 
 enum ColliderType {
     CircleColider,
-    BoxColider
+    BoxCollider
 };
 
 class Collider2D
-{
-    private:
+{      
+    public:
         Collider2D();
 
     public:        
-        std::shared_ptr<Collider2D> create();
+        static std::shared_ptr<Collider2D> create();
 
-        ColliderType ColliderType;
+        ColliderType type;
 
         void onCollision();
-        float getCentralValue(int axis);
-        Vector2D getExtremeValue(int axis);
-        bool isColliding(Collider2D* otherCollider);
+        float getCentralValue(int axis) {
+            return position[axis] + reference[axis] / 2;
+            
+        }
 
+        Vector2D getExtremeValue(int axis) {
+            return Vector2D(position[axis], position[axis] + reference[axis]);
+        }
+
+        bool isColliding(Collider2D* otherCollider);
+        
+        Vector2D position;
+        Vector2D reference;
 
 
 
@@ -30,7 +42,6 @@ class Collider2D
 
         static void CheckAllCollisions();
         static void CheckAllCollisionsMultiThread();
-        
 
         static void cleanup();
         static int  getNumberOfColliders();
@@ -44,5 +55,6 @@ class Collider2D
         static void BruteForceCheck(std::vector<std::size_t>& indexes, int begin, int size);
 
         static std::vector<std::shared_ptr<Collider2D>> allCollider2D;
-        static int numberOfColliders;
 };
+
+#endif
