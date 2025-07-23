@@ -9,7 +9,7 @@ SDL_CFLAGS  := $(shell pkg-config --cflags sdl3)
 SDL_LDFLAGS := $(shell pkg-config --libs sdl3)
 
 # Source files
-SOURCES = main.cpp Renderer.cpp resource_manager.cpp event_manager.cpp time.cpp updatable_object.cpp character.cpp sprite_renderer.cpp input_map.cpp input_manager.cpp block.cpp vector3D.cpp vector2D.cpp collider_2d.cpp collider_3d.cpp
+SOURCES = main.cpp Renderer.cpp resource_manager.cpp event_manager.cpp time.cpp updatable_object.cpp character.cpp sprite_renderer.cpp input_map.cpp input_manager.cpp block.cpp vector3D.cpp vector2D.cpp collider_2d.cpp collider_3d.cpp game_object.cpp
 
 # Object files
 OBJECTS = $(SOURCES:.cpp=.o)

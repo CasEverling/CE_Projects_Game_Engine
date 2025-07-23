@@ -8,7 +8,10 @@
  */
 
 #define SDL_MAIN_USE_CALLBACKS 1  /* use the callbacks instead of main() */
+
 #include <SDL3/SDL.h>
+#include <SDL3/SDL_video.h>
+
 #include <SDL3/SDL_main.h>
 #include "Renderer.h"
 #include "resource_manager.h"
@@ -19,6 +22,7 @@
 #include "input_manager.h"
 #include "block.h"
 #include "collider_3d.h"
+
 
 /* We will use this renderer to draw into this window every frame. */
 #define WINDOW_WIDTH 1000
@@ -71,6 +75,8 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     SDL_Log("Failed to load mappings: %s", SDL_GetError());
     }
 
+    SDL_SetWindowFullscreen(Renderer::window, true);
+
     int count = 0;
     SDL_JoystickID *ids = SDL_GetGamepads(&count);   // ✔ correct order & types
     SDL_Log("Number of joysticks: %d", count);
@@ -80,21 +86,14 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     InputMap* inputMap = new InputMap("inputMaps/character_controller_1.csv");
     InputManager::activateMap(inputMap);
 
-    new Character(0,0, 0, 0);
-
-    for (int i = 0; i < 10; i ++)
-        for (int j = 0; j < 10; j++)
-            new Block(i,j,-1);
+    new Character(0,0,7,7);
     
     
-    for (int i = 0; i < 1; i ++)
-        for (int j = 0; j < 10; j++)
-            new Block(j,i,0);
 
     for (int i = 9; i < 10; i ++)
         for (int j = 0; j < 10; j++)
             new Block(j,i,0);
-
+    
     for (int i = 1; i < 9; i ++)
         for (int j = 0; j < 1; j++)
             new Block(j,i,0);
@@ -106,7 +105,7 @@ SDL_AppResult SDL_AppInit(void **appstate, int argc, char *argv[])
     for (int i = 3; i < 5; i ++)
         for (int j = 3; j < 5; j++)
             new Block(j,i,0);
-    
+
     
     //new Character(20,0, - 100, 10);
 
@@ -125,7 +124,7 @@ SDL_AppResult SDL_AppIterate(void *appstate)
     Time::Tick();
 
     Renderer::lightness = 0;
-    Collider3D::CheckAllCollisions();
+    
 
     /* as you can see from this, rendering draws over whatever was drawn before it. */
     SDL_SetRenderDrawColor(Renderer::renderer, 50*Renderer::lightness, 50*Renderer::lightness, 50*Renderer::lightness, SDL_ALPHA_OPAQUE);  /* black, full alpha */
@@ -134,7 +133,9 @@ SDL_AppResult SDL_AppIterate(void *appstate)
     /* Components that have to be visisted every frame */
     InputManager::AnalyseAxis();
     UpdatableObject::UpdateAll();
+    Collider3D::CheckAllCollisions();
     SpriteRenderer::displayAll();
+
 
     DebugRenderFPS();
     SDL_RenderPresent(Renderer::renderer);  /* put it all on the screen! */

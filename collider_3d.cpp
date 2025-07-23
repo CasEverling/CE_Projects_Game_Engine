@@ -5,6 +5,7 @@
 #include <utility>
 #include "Renderer.h"
 #include <algorithm>
+#include <functional>
 #include "vector3D.h"
 #include "vector2D.h"
 
@@ -13,12 +14,15 @@
 
 
 std::vector<std::shared_ptr<Collider3D>> Collider3D::allCollider3D = std::vector<std::shared_ptr<Collider3D>>();
+
 /* Handles creating and modifying collider */
 
 Collider3D::Collider3D() {
     position = Vector3D{};
     reference = Vector3D{};
 }
+
+
 
 std::shared_ptr<Collider3D> Collider3D::create() {
     std::shared_ptr<Collider3D> pointer = std::make_shared<Collider3D>();
@@ -84,7 +88,7 @@ void Collider3D::CheckAllCollisions(bool isMultiThread) {
     brute_force_size = (0.113 * (float) size / (sd_x + sd_y));
     brute_force_size *= brute_force_size;
 
-    if (brute_force_size < 3) brute_force_size = 3;
+    if (brute_force_size < 50) brute_force_size = 50;
 
     // Sets the position vector
     std::vector<std::size_t> indexes;
@@ -180,6 +184,8 @@ void Collider3D::BruteForceCheck(std::vector<std::size_t>& indexes, int begin, i
         for(int j = i + 1; j < size; j++) {
 
             if (Collider3D::isColliding(allCollider3D[indexes[begin + i]], allCollider3D[indexes[begin + j]])) {
+                allCollider3D[i]->onCollision(allCollider3D[indexes[begin + j]]);
+                allCollider3D[j]->onCollision(allCollider3D[indexes[begin + i]]);
                 Renderer::lightness += 1;
             }
                 
@@ -189,8 +195,10 @@ void Collider3D::BruteForceCheck(std::vector<std::size_t>& indexes, int begin, i
 void Collider3D::BruteForceCheck(const std::vector<std::size_t>& indexes, int size) {
     for(int i = 0; i < size; i++)
         for(int j = i + 1; j < size; j++)
-            if (Collider3D::isColliding(allCollider3D[i], allCollider3D[j]))
+            if (Collider3D::isColliding(allCollider3D[i], allCollider3D[j])) {
+                SDL_Log("%d and %d are colliding");
                 Renderer::lightness += 1;
+            }
                 
 }
 

@@ -100,8 +100,8 @@ void SpriteRenderer::display() {
         break;
     
     case UI_Layer:
-        dst_rect.x = x;
-        dst_rect.y = y ;
+        dst_rect.x = 30*x;
+        dst_rect.y = 30*y ;
         dst_rect.w = texture_width;
         dst_rect.h = texture_height;
         break;

@@ -1,37 +1,37 @@
-#ifndef RIGID_BODY_2D
-#define RIGID_BODY_2D
+#ifndef RIGID_BODY_3D
+#define RIGID_BODY_3D
 
-#include "vector2D.h"
+#include "vector3D.h"
 #include "game_object.h"
-#include "collider_2d.h"
+#include "collider_3d.h"
 #include <cmath>
 
-class RigidBody2D {
+class RigidBody3D {
     private:
         std::shared_ptr<GameObject> parent;
-        Vector2D velocity;
-        Vector2D acceleration;
+        Vector3D velocity;
+        Vector3D acceleration;
         float mass;
         
-        void OnCollision(std::weak_ptr<Collider2D> OtherColldier, Vector2D offset) {
+        void OnCollision(std::weak_ptr<Collider3D> OtherColldier, Vector3D offset) {
             // calculates how to procede based on that 
             // Note: keep reference to own collider
         };
 
         /* Acessible by parent's internal event manager */
-        void SetVelocity(Vector2D&& newVelocity) {
-            velocity = std::forward<Vector2D>(newVelocity);
+        void SetVelocity(Vector3D&& newVelocity) {
+            velocity = std::forward<Vector3D>(newVelocity);
         }
 
-        void SetAcceleration(Vector2D&& newAcceleration) {
-            acceleration = std::forward<Vector2D>(newAcceleration);
+        void SetAcceleration(Vector3D&& newAcceleration) {
+            acceleration = std::forward<Vector3D>(newAcceleration);
         }
 
-        void ApplyForce(Vector2D force) {
+        void ApplyForce(Vector3D force) {
             acceleration += force / mass;
         }
 
-        void AddCollider(std::shared_ptr<Collider2D> colldier);
+        void AddCollider(std::shared_ptr<Collider3D> colldier);
 
     public:
         void Update();
@@ -40,11 +40,11 @@ class RigidBody2D {
             return velocity.get_magnitude() * mass; 
         }
 
-        Vector2D getVelocity() const {
+        Vector3D getVelocity() const {
             return velocity;
         }
 
-        Vector2D getAcceleration() const {
+        Vector3D getAcceleration() const {
             return acceleration;
         }
 

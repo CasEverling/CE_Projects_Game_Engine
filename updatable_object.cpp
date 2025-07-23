@@ -12,7 +12,7 @@ UpdatableObject::UpdatableObject() {
     UpdatableObjects.push_back(this);
 }
 
-void UpdatableObject::cleanup() {
+void UpdatableObject::cleanup() noexcept {
     for (auto it = UpdatableObjects.begin(); it != UpdatableObjects.end(); it ++)
         delete *it;
     UpdatableObjects.clear();

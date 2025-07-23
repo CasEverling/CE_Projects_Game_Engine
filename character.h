@@ -6,9 +6,11 @@
 #include "event_manager.h"
 #include "collider_2d.h"
 #include "collider_3d.h"
+#include "game_object.h"
 
-class Character : public UpdatableObject {
+class Character : public GameObject {
     private:
+        bool freeze = false;
         std::string sprite;
         float velocity_x, velocity_y;
         float position_x, position_y;

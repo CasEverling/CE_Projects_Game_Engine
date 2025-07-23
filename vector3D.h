@@ -3,7 +3,7 @@
 
 #include <cmath>
 #include <exception>
-
+#include <SDL3/SDL.h>
 class Vector3D {
     private:
         float _x, _y, _z, magnitude;
@@ -59,6 +59,14 @@ class Vector3D {
             );
         }
 
+        Vector3D operator*(const float& other) const {
+            return Vector3D(
+                _x * other,
+                _y * other,
+                _z * other
+            );
+        }
+
         // Subrtract
         Vector3D operator-(const Vector3D& other) const {
             return Vector3D(
@@ -78,20 +86,29 @@ class Vector3D {
 
         Vector3D operator-=(const Vector3D& other) {
             _x = _x - other.get_x();
-            _y = _y - other.get_y(),
-            _z = _z - other.get_z()
+            _y = _y - other.get_y();
+            _z = _z - other.get_z();
         }
 
+        Vector3D operator+=(const Vector3D& other) {
+            _x += other.get_x();
+            _y += other.get_y();
+            _z += + other.get_z();
+        }
+
+        Vector3D operator+=(Vector3D&& other) {
+            _x += other.get_x();
+            _y += other.get_y();
+            _z += + other.get_z();
+        }
 
         // Multuply By Scalar
 
         // Dot Product
-        Vector3D dotProcut(const Vector3D& other) const{
-            return Vector3D(
-                _x * other->get_x(), 
-                _y * other->get_y(), 
-                _z * other->get_z()
-            );
+        float dotProcut(const Vector3D& other) const{
+            return _x * other.get_x() +
+                _y * other.get_y() + 
+                _z * other.get_z();
         } 
 
         // Cross Product
@@ -103,13 +120,19 @@ class Vector3D {
             );
         }
 
-        float operator[](size_t index) {
+        float operator[](size_t index) const {
             if (index > 2) throw "Maximum index in a vector3D is 2";
             switch (index) {
                 case 0: return _x;
                 case 1: return _y;
                 case 2: return _z;
             }
+        }
+
+        static Vector3D projection(const Vector3D& v1, const Vector3D& v2) noexcept {
+            if (!v1.magnitude || !v2.magnitude) return Vector3D{0,0,0};
+            float a = (v1.dotProcut(v2) / (v2[0] * v2[0] + v2[1] * v2[1] + v2[2]*v2[2]));
+            return v2 * a;
         }
         
 };

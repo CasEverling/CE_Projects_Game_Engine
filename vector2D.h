@@ -32,7 +32,7 @@ class Vector2D {
             calculateMagnitude();
         }
 
-        float operator[](long long unsigned int index) {
+        float operator[](size_t index) const {
             switch (index)
             {
                 case 0  : return get_x();

@@ -6,18 +6,19 @@
 #include <stdexcept>
 
 class GameObject : InternalEventManager, UpdatableObject {
-    private:
+    protected:
         Vector3D _position;
         Vector3D _size;
     
     public:
         template<typename T>
         GameObject(T&& position, T&& size) : InternalEventManager(), UpdatableObject() {
-            if (std::is_same<T, Vector3D>) throw std::invalid_argument();
+            if (!std::is_same<T, Vector3D>()) throw std::invalid_argument("Position and Size of of GameObject must be Vector3D");
             _position = std::forward<T>(position);
             _size = std::forward<T>(size);
         }
 
+        virtual void Update() = 0;
 
 };
 

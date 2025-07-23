@@ -8,7 +8,7 @@
 #include <functional>
 
 template<typename T>
-using EventMap = std::unordered_map<std::string, std::vector<std::function<T>>;
+using InternalEventMap = std::unordered_map<std::string, std::vector<std::function<T>>>;
 
 enum class EventManagerExceptions {
     UnsusportedEventType = 7
@@ -16,16 +16,16 @@ enum class EventManagerExceptions {
 
 class InternalEventManager {
     private:
-        EventMap<void(int)> intEvents;
-        EventMap<void(float)> floatEvents;
+        InternalEventMap<void(int)> intEvents;
+        InternalEventMap<void(float)> floatEvents;
 
         template<typename T>
-        EventMap<T>& getEventMap(std::function<T>&& f) {
+        InternalEventMap<T>& getEventMap(std::function<T>&& f) {
             throw EventManagerExceptions::UnsusportedEventType;
         };
 
-        EventMap<void(int)>& getEventMap(std::function<void(int)> f) noexcept { return intEvents; }
-        EventMap<void(float)>& getEventMap(std::function<void(float)> f) noexcept { return floatEvents; }
+        InternalEventMap<void(int)>& getEventMap(std::function<void(int)> f) noexcept { return intEvents; }
+        InternalEventMap<void(float)>& getEventMap(std::function<void(float)> f) noexcept { return floatEvents; }
 
     public:        
         template<typename T>

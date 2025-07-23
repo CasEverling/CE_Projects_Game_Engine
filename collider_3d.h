@@ -5,16 +5,38 @@
 #include <vector>
 #include "vector2D.h"
 #include "vector3D.h"
+#include <functional>
+#include <memory>
+#include "Renderer.h"
+#include <SDL3/SDL.h>
+
+enum class Collider3DType {
+    RigidBodyColldier,
+    FieldCollider
+};
 
 class Collider3D
 {      
     public:
         Collider3D();
 
+        void remove() {
+            for (int i = 0; i < allCollider3D.size(); i++) {
+                if (allCollider3D[i].get() == this) {
+                    std::swap(allCollider3D[i], allCollider3D.back());
+                    allCollider3D.pop_back();
+                    break;
+                }
+            }
+            throw "Collider should not exist only outside of allColliders3D";
+        }
+
+    private:
+        std::vector<std::function<void(const std::shared_ptr<Collider3D>)>> callbacks = std::vector<std::function<void(const std::shared_ptr<Collider3D>)>>();
+
     public:        
         static std::shared_ptr<Collider3D> create();
 
-        void onCollision();
         float getCentralValue(int axis) {
             return position[axis] + reference[axis] / 2;
             
@@ -26,9 +48,19 @@ class Collider3D
         
         Vector3D position;
         Vector3D reference;
+        
+        void addCallback(std::function<void(const std::shared_ptr<Collider3D>)> callback) {
+            SDL_Log("Calback function add to collider");
+            callbacks.emplace_back(callback); 
+        }
 
-
-
+        void onCollision(std::shared_ptr<Collider3D> collider) {
+            for (auto callback : callbacks) {
+                Renderer::lightness ++;
+                callback(collider);
+            }
+        }
+    
     public:
         static bool isColliding(std::shared_ptr<Collider3D> collider1, std::shared_ptr<Collider3D> collider2);
 

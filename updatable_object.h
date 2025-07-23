@@ -8,7 +8,7 @@ class UpdatableObject
 {
     public: // Static
         static std::list<UpdatableObject*> UpdatableObjects;
-        static void cleanup();
+        static void cleanup() noexcept;
         static void UpdateAll();
     
     public: // Virtual
